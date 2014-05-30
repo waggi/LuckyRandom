@@ -1,26 +1,25 @@
 class LuckyRandomViewController< UIViewController
-  def loadView
-    self.view = UIImageView.alloc.init
-  end
-
   def viewDidLoad
-    view.image = UIImage.imageNamed('background.png')
+    @logo = UIImageView.alloc.initWithImage(UIImage.imageNamed('RM_logo.png'))
+    @logo.center = view.center
+
+    @logo.userInteractionEnabled = true
+    recognizer = UITapGestureRecognizer.alloc.initWithTarget(self, action: 'showLuckies')
+    @logo.addGestureRecognizer(recognizer)
+
+    view.addSubview(@logo)
 
     @label = makeLabel
     view.addSubview(@label)
-
-    view.userInteractionEnabled=true
-    recognizer = UITapGestureRecognizer.alloc.initWithTarget(self, action:'showLuckies')
-    view.addGestureRecognizer(recognizer)
+    @label.hidden = true
 
     @luckyRandom = LuckyRandom.new
   end
 
   def makeLabel
-    label = UILabel.alloc.initWithFrame([[480, 240], [500, 500]])
+    label = UILabel.alloc.initWithFrame(UIScreen.mainScreen.bounds)
     label.numberOfLines = 0
     label.font = UIFont.fontWithName('Noteworthy', size:20)
-    label.setBackgroundColor(UIColor.clearColor);
     label.textColor = UIColor.whiteColor
     label.textAlignment = UITextAlignmentCenter
     label
@@ -28,5 +27,7 @@ class LuckyRandomViewController< UIViewController
 
   def showLuckies
     @label.text = @luckyRandom.randomAnswer(10)
+    @label.hidden = false
+    @logo.hidden = true
   end
 end
